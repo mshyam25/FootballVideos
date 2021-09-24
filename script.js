@@ -5,30 +5,27 @@ let serieContainer = document.getElementById('container12')
 let bundesligaContainer = document.getElementById('container14')
 let ligue1Container = document.getElementById('container16')
 
-
+window.onload = footballVideos;
 
 async function footballVideos() {
+    try {
 
+        const response = await fetch('https://www.scorebat.com/video-api/v3/')
 
-    const response = await fetch('https://www.scorebat.com/video-api/v3/')
+        const data = await response.json()
+        await appendRecentHighlights(data)
+        append(data, championsLeagueContainer, 'CHAMPIONS LEAGUE:')
+        append(data, eplContainer, 'ENGLAND: Premier League')
+        append(data, laligaContainer, 'SPAIN: La Liga')
+        append(data, serieContainer, 'ITALY: Serie A')
+        append(data, bundesligaContainer, 'GERMANY: Bundesliga')
+        append(data, ligue1Container, 'FRANCE: Ligue 1')
 
-    const data = await response.json()
-    await appendRecentHighlights(data)
-    append(data, championsLeagueContainer, 'CHAMPIONS LEAGUE:')
-    append(data, eplContainer, 'ENGLAND: Premier League')
-    append(data, laligaContainer, 'SPAIN: La Liga')
-    append(data, serieContainer, 'ITALY: Serie A')
-    append(data, bundesligaContainer, 'GERMANY: Bundesliga')
-    append(data, ligue1Container, 'FRANCE: Ligue 1')
+    } catch (e) {
 
-
-
-
+        errorMsg(e);
+    }
 }
-
-
-footballVideos();
-
 //Function to Append Highlights
 
 let append = (data, container, league) => {
@@ -54,6 +51,14 @@ let append = (data, container, league) => {
             break
     }
 
+    if (count === 0) {
+        const div = document.createElement('div')
+        div.innerHTML = 'No recent matches'
+        div.className = 'highlights'
+        container.append(div)
+
+    }
+
 
 }
 
@@ -72,4 +77,11 @@ let appendRecentHighlights = (data) => {
 
     }
 
+}
+
+// Function to Print Error Msg
+
+function errorMsg(e) {
+
+    console.log(e)
 }
